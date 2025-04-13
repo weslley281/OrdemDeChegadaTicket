@@ -10,6 +10,10 @@ const CreateUserSchema = z.object({
   email: z.string().email('E-mail inválido'),
   password: z.string().min(6, 'A senha deve ter no mínimo 6 caracteres'),
 });
+const LoginUserSchema = z.object({
+  email: z.string().email({ message: 'E-mail inválido' }),
+  password: z.string().min(6, { message: 'A senha deve ter no mínimo 6 caracteres' }),
+});
 
 export class UserController {
 
@@ -38,10 +42,22 @@ export class UserController {
 
   login = async (req: Request, res: Response) => {
     try {
+      const validatedData = LoginUserSchema.parse(req.body);
+
       const authUser = new AuthUserUseCase(repository);
-      const result = await authUser.execute(req.body);
+      const result = await authUser.execute(validatedData);
       return res.json(result);
     } catch (error: any) {
+      if (error.name === 'ZodError') {
+        return res.status(422).json({
+          error: 'Dados inválidos',
+          issues: error.errors.map((err: any) => ({
+            campo: err.path[0],
+            mensagem: err.message,
+          })),
+        });
+      }
+
       return res.status(401).json({ error: error.message });
     }
   }

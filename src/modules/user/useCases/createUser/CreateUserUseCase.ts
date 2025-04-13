@@ -6,9 +6,10 @@ export class CreateUserUseCase {
   constructor(private userRepository: IUserRepository) {}
 
   async execute(data: ICreateUserDTO) {
-    const userExists = await this.userRepository.findByEmail(data.email);
-    if (userExists) {
-      throw new Error('Usuário já cadastrado');
+    const userEmailExists = await this.userRepository.find(data.email);
+
+    if (userEmailExists) {
+      throw new Error('Email de Usuário já cadastrado');
     }
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
