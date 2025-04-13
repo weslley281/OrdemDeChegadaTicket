@@ -30,7 +30,7 @@ app.use('/users', userRoutes); // <-- suas rotas estão aqui
 async function main() {
   try {
     await sequelize.sync(); // garante que os models estão sincronizados
-    app.listen(3333, () => console.log('Servidor de banco de dados online 🚀'));
+    app.listen(3333, () => console.log('🟢 Servidor de banco de dados online 🚀'));
   } catch (error) {
     console.error('Erro ao iniciar o servidor:', error);
   }
