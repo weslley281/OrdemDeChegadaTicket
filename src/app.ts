@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { routes } from './routes';
 import helmet from 'helmet';
+import { userRoutes } from './routes/user.routes';
 
 const app = express();
 
@@ -21,5 +22,6 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api', routes);
+app.use('/users', userRoutes);
 
 export { app };
