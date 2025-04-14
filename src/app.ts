@@ -4,8 +4,14 @@ import { routes } from './routes';
 import helmet from 'helmet';
 import { userRoutes } from './routes/user.routes';
 import { sequelize } from './config/sequelize';
+import { setupSwagger } from './swagger'; // Importa a configuração do Swagger
 
 const app = express();
+
+app.use(express.json());
+
+// Configura o Swagger
+setupSwagger(app);
 
 // Segurança com Helmet
 app.use(
